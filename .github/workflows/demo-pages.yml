@@ -34,7 +34,7 @@ jobs:
         run: npm run test:tour
       - name: Build and validate static demo
         run: npm run build:pages
-      - name: Upload private preview artifact
+      - name: Upload preview artifact
         uses: actions/upload-artifact@v4
         with:
           name: sales-core-demo
@@ -42,13 +42,13 @@ jobs:
           include-hidden-files: true
           retention-days: 7
       - name: Upload Pages artifact
-        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.DEMO_PAGES_ENABLED == 'true') }}
+        if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: prototype/.pages
 
   deploy:
-    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.DEMO_PAGES_ENABLED == 'true') }}
+    if: ${{ github.ref == 'refs/heads/main' && github.event_name != 'pull_request' }}
     needs: build
     runs-on: ubuntu-latest
     permissions:
