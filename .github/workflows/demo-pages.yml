@@ -1,0 +1,74 @@
+name: Sales Core demo
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ['prototype/**', '.github/workflows/demo-pages.yml']
+  push:
+    branches: [main]
+    paths: ['prototype/**', '.github/workflows/demo-pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: prototype
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            npm install --no-audit --no-fund
+          fi
+      - name: Tour configuration tests
+        run: npm run test:tour
+      - name: Build and validate static demo
+        run: npm run build:pages
+      - name: Upload private preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sales-core-demo
+          path: prototype/.pages
+          include-hidden-files: true
+          retention-days: 7
+      - name: Upload Pages artifact
+        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.DEMO_PAGES_ENABLED == 'true') }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: prototype/.pages
+
+  deploy:
+    if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || vars.DEMO_PAGES_ENABLED == 'true') }}
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: sales-core-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy demo
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Show demo URL
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          printf '### Demo URL\n\n%s/demo/\n' "${SITE_URL%/}" >> "$GITHUB_STEP_SUMMARY"

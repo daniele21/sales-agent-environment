@@ -43,3 +43,17 @@ Oggi → Prepara visita → Segna preparata → Acquisisci esito → review → 
 Open Esplora Sales Core from the header, Today or Assistant. First use offers an optional discovery dialog; choose the full tour or one of eight mini tours. Interact with the highlighted controls or use the guided button. Pause and resume from the current chapter, or exit and discard progress. Only the chapter index persists, not the demo session's temporary edits. The tour uses a separate in-memory workspace; ordinary data is not modified. Real file selection and clipboard export are disabled in the tour. Run `npm run test:tour` for the configuration tests, and `npm run build` for production compilation.
 
 All tours now start on Oggi, including after pause. Follow the actual navigation controls; no direct jumps. The last visited chapter is shown as a reference and resume replays the path.
+
+## Sharing the demo via GitHub Pages
+
+The workflow [Sales Core demo](../.github/workflows/demo-pages.yml) runs the tour tests and builds a static preview on relevant pushes/PRs. The generated site has a neutral root and 404 page, and the React app lives only at `/demo/`. Vite uses relative assets, so the site works under a project path or custom domain. The root does not link or redirect to the demo. A robots meta directive requests no indexing, but it is not access control.
+
+Initial setup (repository admin):
+1. Keep the repository private. A plan supporting Pages for private repositories is required (e.g. GitHub Pro).
+2. Settings → Pages → Build and deployment → Source → GitHub Actions.
+3. Actions → Sales Core demo → Run workflow → main. This explicitly publishes the demo. The workflow summary will show the demo URL.
+4. To enable automatic deployments on future main changes, set repository Actions variable `DEMO_PAGES_ENABLED` to `true` (Settings → Secrets and variables → Actions → Variables). Leave it unset for manual publishing only.
+
+Expected default URL after successful deployment: https://daniele21.github.io/sales-agent-environment/demo/. No external authentication is included: anyone with the URL may access the site, even though the repository is private. Do not use real customers, documents, credentials or confidential information. Only generated frontend assets are deployed; source docs are excluded. Browser storage is local per origin. The build is also available as a private Actions artifact for seven days. The current project has no committed npm lockfile; CI uses npm install until one is added, and switches to npm ci if present.
+
+Local production check: `npm run test:tour && npm run build:pages`, then serve `prototype/.pages` with a static web server. The development command remains unchanged.

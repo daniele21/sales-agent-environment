@@ -7,7 +7,8 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "test:tour": "node --test tour-config.test.mjs"
+    "test:tour": "node --test tour-config.test.mjs",
+    "build:pages": "vite build --base=./ && node scripts/stage-pages.mjs"
   },
   "dependencies": {
     "react": "^19.0.0",
