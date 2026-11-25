@@ -37,3 +37,7 @@ AI loading states are now simulated with contextual skeletons and short delays. 
 ## Usability walkthrough
 
 Oggi → Prepara visita → Segna preparata → Acquisisci esito → review → Nota salvata → proposal/follow-up or dossier. The next visit advances only after a linked note is saved. One local draft can be resumed from Oggi or Capture. Search is available in the header. Dossier tabs: Panoramica, Storico, Attività. Edited drafts survive navigation on this browser, separate from explicit save. Use synthetic data only; no real audio, file contents or AI services.
+
+## Interactive product tour
+
+Open Esplora Sales Core from the header, Today or Assistant. First use offers an optional discovery dialog; choose the full tour or one of eight mini tours. Interact with the highlighted controls or use the guided button. Pause and resume from the current chapter, or exit and discard progress. Only the chapter index persists, not the demo session's temporary edits. The tour uses a separate in-memory workspace; ordinary data is not modified. Real file selection and clipboard export are disabled in the tour. Run `npm run test:tour` for the configuration tests, and `npm run build` for production compilation.
