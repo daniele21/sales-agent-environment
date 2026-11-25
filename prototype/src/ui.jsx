@@ -32,7 +32,7 @@ export function Picker({label,options,value,defaultValue,onChange,name,searchabl
  useEffect(()=>{
    if(!open)return;
    const prev=document.body.style.overflow;document.body.style.overflow='hidden';
-   (search.current||panel.current?.querySelector('[data-current=true]')||panel.current?.querySelector('[data-option]')||panel.current)?.focus({preventScroll:true});
+   ((window.innerWidth>720?search.current:null)||panel.current?.querySelector('[data-current=true]')||panel.current?.querySelector('[data-option]')||panel.current)?.focus({preventScroll:true});
    return()=>{document.body.style.overflow=prev}
  },[open]);
  useEffect(()=>{if(creating)createInput.current?.focus()},[creating]);
@@ -59,7 +59,7 @@ export function Picker({label,options,value,defaultValue,onChange,name,searchabl
      <span className="picker-trigger-copy"><small>{label}</small><strong>{current?.label||'Seleziona'}</strong></span>
      <ChevronDown className="picker-chevron" size={17}/>
    </button>
-   {open&&createPortal(<div className="picker-layer" data-picker-layer="" onClick={close} onKeyDown={key}>
+   {open&&createPortal(<div className="picker-layer" data-picker-layer="" onClick={e=>{e.stopPropagation();close()}} onKeyDown={key}>
      <div className="picker-panel" id={id} ref={panel} role="dialog" aria-modal="true" aria-label={'Seleziona '+label.toLowerCase()} tabIndex={-1} style={geometry||{}} onClick={e=>e.stopPropagation()}>
        <div className="picker-grip" aria-hidden="true"/>
        <div className="picker-heading"><div><strong>{creating?'Nuovo cliente':label==='Cliente'?'Seleziona cliente':'Seleziona '+label.toLowerCase()}</strong><small>{creating?'Salvato solo nel workspace demo':label==='Cliente'?'Associa le informazioni al cliente corretto':'Scegli una delle opzioni'}</small></div><button type="button" className="picker-close" aria-label="Chiudi selettore" onClick={close}><X size={18}/></button></div>
