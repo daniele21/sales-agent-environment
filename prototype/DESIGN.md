@@ -15,3 +15,7 @@ The underlying fixture extraction and local demo data remain unchanged. No real 
 ## Shared controls
 
 All four native selects have been replaced by a reusable themed Picker. Desktop uses an anchored selection dialog; mobile uses a bottom sheet. Account search and local demo account creation are supported. Deadline options remain illustrative buckets, not actual calendar dates. Hidden form inputs retain the selected values; review checkboxes retain native semantics with a themed visual. Keyboard focus, Escape, arrow navigation and reduced motion are implemented; browser/accessibility testing remains necessary. No extra library dependency was introduced.
+
+## Contextual sales experience v3
+
+Daily briefing and visit preparation live in Today/Accounts; Capture opens one multimodal sheet; proposals and follow-up live in action detail and dossier. No new main navigation. Briefing uses synthetic visits and local task state, approach uses confirmed note facts and a deterministic playbook. Attachments share one review; only the synthetic Bar Centrale document has fixture extraction. Real files are represented by metadata only. Drafts are editable, stored locally and copyable; never sent. All new workflows are simulations and require browser validation.
