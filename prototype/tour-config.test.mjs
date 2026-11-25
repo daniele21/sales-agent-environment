@@ -5,3 +5,5 @@ test('all configured chapters exist and have unique ids',()=>{assert.equal(new S
 test('only the expected action advances a chapter',()=>{const s={id:'full',index:0,revision:0};assert.equal(advanceTour(s,'note-saved'),s);assert.equal(advanceTour(s,'daily-open').index,1)});
 test('resume rejects completed, malformed and unknown progress',()=>{assert.ok(validProgress({id:'full',index:0}));for(const p of [null,{}, {id:'full',index:-1},{id:'full',index:100},{id:'unknown',index:0},{id:'full',index:1.5}])assert.equal(validProgress(p),false)});
 test('every tour can complete from its own events',()=>{for(const t of TOURS){let s={id:t.id,index:0};for(let i=0;i<t.steps.length;i++)s=advanceTour(s,getStep(t.id,i).event);assert.equal(s.index,t.steps.length);assert.equal(validProgress(s),false)}});
+
+test('every tour starts at Oggi and follows connected screens',()=>{for(const t of TOURS){assert.equal(getStep(t.id,0).screen,'home',t.id);for(let i=0;i<t.steps.length-1;i++){const step=getStep(t.id,i),next=getStep(t.id,i+1);assert.equal(step.next,next.screen,t.id+': '+step.id+' → '+next.id)}}});

@@ -31,3 +31,7 @@ Today features the first unfinished synthetic visit; explicit preparation shifts
 ## Guided product discovery
 
 An optional first-use discovery dialog, a full fourteen-step tour, and eight independent mini tours share the real React workspace. The declarative configuration maps chapters to actual action events, with a guided fallback, previous/skip, pause/resume and explicit exit. Spotlight is measured from data-tour targets; animations honor reduced motion. TourWorkspace mounts a separate in-memory sandbox: usePersist never reads or writes ordinary workspace storage in tour mode, actual file selection and clipboard export are disabled, and no network calls are added. Only tour identity and chapter index persist; resume reconstructs chapter prerequisites, not prior temporary edits. Leaving the tour remounts the ordinary workspace from its existing persisted data (home screen). Fixture-only analysis remains simulated. The tour configuration has dependency-free node tests; browser, accessibility and responsive validation remain necessary.
+
+## Home-first guided navigation
+
+All tours start on Oggi. Guided buttons activate visible application controls; real events advance the tour. No automatic screen jumps or hidden fixture seeding. Full tour returns from material editors before opening the dossier. Pause records the last chapter for reference; resume replays from Oggi in a fresh sandbox. Arbitrary skip/back jumps are replaced by restart from Oggi. Route continuity is covered by configuration tests.

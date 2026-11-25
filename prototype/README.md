@@ -41,3 +41,5 @@ Oggi → Prepara visita → Segna preparata → Acquisisci esito → review → 
 ## Interactive product tour
 
 Open Esplora Sales Core from the header, Today or Assistant. First use offers an optional discovery dialog; choose the full tour or one of eight mini tours. Interact with the highlighted controls or use the guided button. Pause and resume from the current chapter, or exit and discard progress. Only the chapter index persists, not the demo session's temporary edits. The tour uses a separate in-memory workspace; ordinary data is not modified. Real file selection and clipboard export are disabled in the tour. Run `npm run test:tour` for the configuration tests, and `npm run build` for production compilation.
+
+All tours now start on Oggi, including after pause. Follow the actual navigation controls; no direct jumps. The last visited chapter is shown as a reference and resume replays the path.
