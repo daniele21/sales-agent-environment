@@ -1,4 +1,5 @@
-import React,{useEffect,useState} from 'react';
+import React,{useEffect,useState,useContext} from 'react';
+import {TourSandboxContext} from './tour.jsx';
 import {Sparkles} from 'lucide-react';
 
 // Prototype-only latency. Cache completed read-only simulations in memory;
@@ -6,6 +7,8 @@ import {Sparkles} from 'lucide-react';
 // A real provider will replace this timer with abortable request state.
 const completed=new Set();
 export function useDemoReady(key,enabled=true,delay=1000,cache=true){
+ const sandbox=useContext(TourSandboxContext);
+ cache=cache&&!sandbox;
  const [readyKey,setReadyKey]=useState(null);
  const ready=readyKey===key||(cache&&completed.has(key));
  useEffect(()=>{

@@ -11,7 +11,7 @@ import {Skeleton, SkeletonLines, LoadingContent, useDemoReady} from './loading.j
 import './loading.css';
 import {NextActivity, CaptureSuccess, ContextTip, GlobalSearch, ResumeCapture} from './journey.jsx';
 import './journey.css';
-import {TourWorkspace, TourCoach, TourSandboxContext, DiscoveryCenter} from './tour.jsx';
+import {TourWorkspace, TourCoach, TourSandboxContext} from './tour.jsx';
 import './tour.css';
 
 const SAMPLE='Ho incontrato il titolare del Bar Centrale. È interessato a TiPOS per ridurre i tempi di incasso. Vuole una proposta economica e alcuni riferimenti di altri bar in zona. Gli ho promesso di richiamarlo per confermare i documenti necessari per l’attivazione.';
@@ -93,7 +93,7 @@ function App({tour,onDiscover}){
    if(withDocument)setAttachments(old=>old.some(a=>a.id==='demo-merchant-sheet')?old:[...old,{id:'demo-merchant-sheet',name:'Scheda Bar Centrale (demo).pdf',type:'application/pdf',size:0,demo:true}]);
  }
  function seedTourReceipt(){
-   if(receipt?.account==='Bar Centrale'&&receipt.proposal&&receipt.followup)return receipt;
+   if(receipt?.account==='Bar Centrale')return receipt;
    const proposal={id:'tour-proposal',account:'Bar Centrale',title:'Preparare proposta economica',detail:'Richiesta del cliente',due:'Oggi',priority:'Alta',done:false,source:'tour-note'};
    const followup={id:'tour-followup',account:'Bar Centrale',title:'Richiamare per documenti',detail:'Impegno del commerciale',due:'Domani',priority:'Alta',done:false,source:'tour-note'};
    const nf=[...FACTS,...getDemoFacts([{id:'demo-merchant-sheet'}],'Bar Centrale')];
@@ -102,13 +102,14 @@ function App({tour,onDiscover}){
    const next={id:'tour-note',account:'Bar Centrale',newFacts:2,approvedFacts:4,created:[proposal,followup],proposal,followup};
    setReceipt(next);setAccount('Bar Centrale');return next;
  }
+ function tourMaterial(kind){const r=seedTourReceipt();const existing=kind==='proposal'?r.proposal:r.followup;const pattern=kind==='proposal'?/proposta|presentazion/i:/follow.up|richiam|contatt/i;const available=existing||open.find(t=>t.account==='Bar Centrale'&&pattern.test(t.title));if(available)return available;const task={id:uid(),account:'Bar Centrale',title:kind==='proposal'?'Preparare proposta commerciale':'Preparare follow-up',detail:'Esempio aggiuntivo richiesto nel tour',due:'Da definire',priority:'Media',done:false,source:r.id};setTasks(old=>[...old,task]);return task}
  const stepId=tour?.step?.id;
  useEffect(()=>{
    if(!stepId)return;
    setModal(null);setRecording(false);
    switch(stepId){
     case 'daily':go('home');break;
-    case 'agenda':go('daily');break;
+    case 'agenda':setVisitStates(old=>{if(old.v1!=='done')return old;const next={...old};delete next.v1;return next});go('daily');break;
     case 'visit':setAccount('Bar Centrale');setVisitId('v1');setVisitTime('10:30');setVisitBack('daily');go('visit');break;
     case 'capture-menu':setAccount('Bar Centrale');setCaptureDraft(null);go('visit');setModal({type:'capture-menu',account:'Bar Centrale',back:'visit',linkedVisit:'v1'});break;
     case 'voice':if(page!=='capture'||mode!=='voice'||account!=='Bar Centrale'){setAccount('Bar Centrale');setCaptureBack('visit');setCaptureVisit('v1');setText('');setAttachments([]);setElapsed(0);setMode('voice');go('capture')}setRecording(true);break;
@@ -116,8 +117,8 @@ function App({tour,onDiscover}){
     case 'analyze':if(page!=='capture'||account!=='Bar Centrale'||!text.trim())seedTourCapture(true);go('capture');break;
     case 'review':if(page!=='review'||account!=='Bar Centrale'){seedTourCapture(true);setFacts([...FACTS,...getDemoFacts([{id:'demo-merchant-sheet'}],'Bar Centrale')].map(f=>({...f,selected:true})));setProposals(PROPOSALS.map(p=>({...p,selected:true})));setReviewTab('Riepilogo')}go('review');break;
     case 'success':seedTourReceipt();go('success');break;
-    case 'proposal':if(page!=='draft'||draftContext?.kind!=='proposal'){const r=seedTourReceipt();setDraftContext({task:r.proposal,kind:'proposal',back:'success'});go('draft')}break;
-    case 'followup':if(page!=='draft'||draftContext?.kind!=='followup'){const r=seedTourReceipt();setDraftContext({task:r.followup,kind:'followup',back:'success'});go('draft')}break;
+    case 'proposal':if(page!=='draft'||draftContext?.kind!=='proposal'||draftContext?.task.account!=='Bar Centrale'){const task=tourMaterial('proposal');setAccount('Bar Centrale');setDraftContext({task,kind:'proposal',back:'success'});go('draft')}break;
+    case 'followup':if(page!=='draft'||draftContext?.kind!=='followup'||draftContext?.task.account!=='Bar Centrale'){const task=tourMaterial('followup');setAccount('Bar Centrale');setDraftContext({task,kind:'followup',back:'success'});go('draft')}break;
     case 'memory':seedTourReceipt();setAccount('Bar Centrale');setAccountTab('Storico');go('account');break;
     case 'assistant':setAnswer('');setChat('');go('assistant');break;
     case 'answer':go('assistant');if(!answer)setAnswer(due.map(t=>'• '+t.title).join('\n')||'Nessuna azione oggi.');break;
@@ -133,7 +134,7 @@ function App({tour,onDiscover}){
     case 'document':setAttachments(old=>old.some(a=>a.id==='demo-merchant-sheet')?old:[...old,{id:'demo-merchant-sheet',name:'Scheda Bar Centrale (demo).pdf',type:'application/pdf',size:0,demo:true}]);tour?.onEvent('attachment-added');break;
     case 'analyze':if(page!=='processing')analyze();break;
     case 'review':save();break;
-    case 'success':if(receipt?.proposal)openDraft(receipt.proposal,'proposal','success');break;
+    case 'success':if(receipt)openDraft(tourMaterial('proposal'),'proposal','success');break;
     case 'proposal':case 'followup':document.querySelector('[data-tour="save-material"]:not(:disabled)')?.click();break;
     case 'memory':tour?.onEvent('memory-seen');break;
     case 'assistant':askDemo('Quali azioni sono in scadenza oggi?');break;
