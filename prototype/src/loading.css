@@ -1,0 +1,33 @@
+/* Loading primitives: match final content, never block local navigation. */
+.ai-loading{--sk-base:#ece8f2;--sk-glint:#f8f6fc;display:grid;gap:13px;min-width:0}
+.ai-loading.card{padding:19px}
+.ai-loading.compact{gap:9px}
+.ai-loading-label{display:flex;align-items:center;gap:7px;color:var(--purple-dark);font-size:11px;line-height:1.4;font-weight:650}
+.ai-loading-label svg{flex-shrink:0}
+.ai-demo-marker{font-size:10px;font-weight:500;color:var(--muted);margin-left:auto;white-space:nowrap}
+.skeleton-body{display:grid;gap:13px;min-width:0}
+.skeleton{display:block;height:11px;border-radius:5px;background:var(--sk-base);position:relative;overflow:hidden;max-width:100%}
+.skeleton:after{content:'';position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,var(--sk-glint),transparent);animation:skeleton-shimmer 1.65s ease-in-out infinite}
+.skeleton-heading{height:19px;border-radius:6px}
+.skeleton-square{height:36px;width:36px;border-radius:10px;flex-shrink:0}
+.skeleton-lines{display:grid;gap:9px;min-width:0}
+.skeleton-row{display:flex;gap:11px;align-items:center}
+.skeleton-row .skeleton-lines{flex:1}
+.ai-loading.dark{--sk-base:#ffffff20;--sk-glint:#ffffff27}
+.ai-loading.dark .ai-loading-label{color:#e1d7ff}
+.ai-loading.dark .ai-demo-marker{color:#d5c8e7}
+.hero-generated{min-height:48px;min-width:0}
+.hero-generated .ai-loading{max-width:360px}
+.approach-result{display:grid;gap:10px}
+.skeleton-preview-title{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);margin-top:3px}
+.capture-preview{min-height:215px}
+.draft-placeholder{min-height:278px;align-content:start}
+.draft-placeholder.proposal-placeholder{min-height:365px}
+.draft-placeholder .skeleton-body{gap:18px}
+.ai-reveal{animation:ai-content-in .24s ease-out both}
+.processing-indeterminate{height:5px;width:min(100%,360px);overflow:hidden;border-radius:10px;background:#eeeaf5}
+.processing-indeterminate span{display:block;height:100%;width:38%;border-radius:10px;background:linear-gradient(90deg,#a088ed,#6246cf);animation:ai-indeterminate 1.25s ease-in-out infinite}
+@keyframes skeleton-shimmer{to{transform:translateX(100%)}}
+@keyframes ai-content-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ai-indeterminate{0%{transform:translateX(-100%)}100%{transform:translateX(265%)}}
+@media(prefers-reduced-motion:reduce){.skeleton:after{display:none}.ai-reveal,.processing-indeterminate span{animation:none!important}.processing-indeterminate span{transform:translateX(80%)}}

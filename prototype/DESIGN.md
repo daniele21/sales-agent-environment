@@ -19,3 +19,7 @@ All four native selects have been replaced by a reusable themed Picker. Desktop 
 ## Contextual sales experience v3
 
 Daily briefing and visit preparation live in Today/Accounts; Capture opens one multimodal sheet; proposals and follow-up live in action detail and dossier. No new main navigation. Briefing uses synthetic visits and local task state, approach uses confirmed note facts and a deterministic playbook. Attachments share one review; only the synthetic Bar Centrale document has fixture extraction. Real files are represented by metadata only. Drafts are editable, stored locally and copyable; never sent. All new workflows are simulations and require browser validation.
+
+## AI loading states
+
+Reusable Skeleton, SkeletonLines and LoadingContent reserve the approximate structure of generated results. Home/daily brief, visit objective/approach/questions, contextual questions, suggestions, capture review preview, new proposal/follow-up and supported demo chat queries show explicitly labelled simulated latency. Agenda, tasks, navigation and saved drafts stay immediately available. Draft actions are disabled until generation finishes; capture and chat can be cancelled. Completed read-only demo states are cached in memory by context; effects clean up timers. No actual model request or token streaming. Reduced motion uses static placeholders; no fake percentage. Production should bind these UI states to actual requests, errors, retries and cancellation.

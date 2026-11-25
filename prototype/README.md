@@ -31,3 +31,5 @@ One dominant action per screen, concise summary by default, detailed evidence on
 ## Contextual sales journey (v3)
 
 Home → daily briefing → visit preparation (objective, approach, questions and objections) → capture menu → voice/text/attachment review → dossier → action detail → editable proposal or follow-up draft. Use Bar Centrale and the synthetic document fixture to see simulated document extraction. Briefings and drafts use local facts and deterministic templates; visit times are fixtures. Draft edits persist locally and can be copied, but nothing is sent. Actual OCR, audio recording, LLMs, reminders and CRM integration remain out of scope.
+
+AI loading states are now simulated with contextual skeletons and short delays. Reopening unchanged read-only context can reuse an in-memory completion; saved drafts appear immediately. No real LLM or OCR call is made.
